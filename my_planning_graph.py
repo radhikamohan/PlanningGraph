@@ -429,7 +429,7 @@ class PlanningGraph():
         a2_precond_neg = set(node_a2.action.precond_neg)
         a2_effect_add = set(node_a2.action.effect_add)
         a2_effect_rem = set(node_a2.action.effect_rem)
-        return (a1_precond_pos & a2_effect_rem) | (a1_precond_neg & a2_effect_add) | (a2_precond_pos & a1_effect_rem) & (a2_precond_neg & a1_effect_add)
+        return (a1_precond_pos & a2_effect_rem) | (a1_precond_neg & a2_effect_add) | (a2_precond_pos & a1_effect_rem) | (a2_precond_neg & a1_effect_add)
 
     def competing_needs_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
         """
