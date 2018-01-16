@@ -441,14 +441,11 @@ class PlanningGraph():
         :param node_a2: PgNode_a
         :return: bool
         """
-        a1_precond_pos = set(node_a1.action.precond_pos)
-        a1_precond_neg = set(node_a1.action.precond_neg)
-        a2_precond_pos = set(node_a1.action.precond_pos)
-        a2_precond_neg = set(node_a2.action.precond_neg)
-        if (a1_precond_pos & a2_precond_pos) | (a1_precond_neg & a2_precond_neg):
-            return False
-        else:
-            return True
+        for a1p1 in node_a1.parents:
+            for a2p2 in node_a2.parents:
+                if a1p1.is_mutex(a2p2):
+                    return True
+        return False
 
     def update_s_mutex(self, nodeset: set):
         """ Determine and update sibling mutual exclusion for S-level nodes
@@ -516,10 +513,10 @@ class PlanningGraph():
         """
         level_sum = 0
         goals = set(self.problem.goal)
-        # for each goal in the problem, determine the level cost, then add them together
         for level, level_states in enumerate(self.s_levels):
             for state in level_states:
-                if state in goals:
+                if state.symbol in goals:
                     level_sum += level
                     goals.remove(state.symbol)
+                    break
         return level_sum
